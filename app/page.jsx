@@ -7,37 +7,40 @@ import { useState, useMemo, useEffect } from "react";
    ═══════════════════════════════════════════════════════════════════ */
 
 const DAY=864e5;
-const iso=d=>d.toISOString().split("T")[0];
-const parse=s=>{const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
-const addD=(d,n)=>new Date(d.getTime()+n*DAY);
+const iso=t=>{const d=new Date(t);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const parse=s=>{if(typeof s==="number")return s;if(s instanceof Date)return s.getTime();const[y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d).getTime()};
+const addD=(d,n)=>d+n*DAY;
 const daysBtw=(a,b)=>Math.round((b-a)/DAY)+1;
 const mn=i=>["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][i];
-const fmt=d=>`${d.getDate()} ${mn(d.getMonth())} ${d.getFullYear()}`;
-const fmtS=d=>`${d.getDate()} ${mn(d.getMonth())}`;
+const fmt=t=>{const d=new Date(t);return `${d.getDate()} ${mn(d.getMonth())} ${d.getFullYear()}`};
+const fmtS=t=>{const d=new Date(t);return `${d.getDate()} ${mn(d.getMonth())}`};
 
 const SCHENGEN=["Austria","Belgium","Bulgaria","Croatia","Czech Republic","Denmark","Estonia","Finland","France","Germany","Greece","Hungary","Iceland","Italy","Latvia","Liechtenstein","Lithuania","Luxembourg","Malta","Netherlands","Norway","Poland","Portugal","Romania","Slovakia","Slovenia","Spain","Sweden","Switzerland"];
 
 /* ─── Engine ─── */
-function calc(trips,date){
-  const d=date instanceof Date?date:parse(date),ws=addD(d,-179);
+function calc(trips,dateT){
+  const d=typeof dateT==="number"?dateT:parse(dateT), ws=d-179*DAY;
   let used=0;
-  for(const t of trips){
-    const e=typeof t.entry==="string"?parse(t.entry):t.entry;
-    const x=typeof t.exit==="string"?parse(t.exit):t.exit;
-    const s=e<ws?ws:e,f=x>d?d:x;
-    if(s<=f)used+=daysBtw(s,f);
+  for(let i=0; i<trips.length; i++){
+    const t=trips[i];
+    const e=t.pE||parse(t.entry), x=t.pX||parse(t.exit);
+    const s=e<ws?ws:e, f=x>d?d:x;
+    if(s<=f)used+=Math.round((f-s)/DAY)+1;
   }
   return{used,left:Math.max(0,90-used),ws};
 }
 function maxStay(trips,entry){
-  const e=typeof entry==="string"?parse(entry):entry;
+  const e=parse(entry);
   let m=0;
-  for(let i=0;i<91;i++){const d=addD(e,i);const t=[...trips,{entry:iso(e),exit:iso(d)}];if(calc(t,d).used<=90)m=i+1;else break;}
+  for(let i=0;i<91;i++){
+    const d=e+i*DAY;
+    const testTrips=[...trips,{pE:e,pX:d}];
+    if(calc(testTrips,d).used<=90)m=i+1;else break;
+  }
   return m;
 }
-function reentry(trips){
-  const today=new Date();today.setHours(0,0,0,0);
-  for(let i=0;i<=400;i++){const d=addD(today,i);if(calc(trips,d).left>0)return{date:d,wait:i};}
+function reentry(trips,todayT){
+  for(let i=0;i<=400;i++){const d=todayT+i*DAY;if(calc(trips,d).left>0)return{date:d,wait:i};}
   return null;
 }
 
@@ -83,12 +86,13 @@ function Timeline({trips,ws,today}){
       </div>
       <div style={{position:"relative",height:28,background:"#F1F5F9",borderRadius:8,overflow:"hidden"}}>
         {trips.map((t,i)=>{
-          const e=parse(t.entry),x=parse(t.exit);
+          const e=t.pE||parse(t.entry),x=t.pX||parse(t.exit);
           const oS=e<ws?ws:e,oE=x>today?today:x;
           if(oS>today||oE<ws)return null;
           const l=((oS-ws)/DAY)/180*100;
           const w=Math.max(1.5,daysBtw(oS,oE)/180*100);
           return <div key={i} style={{position:"absolute",top:4,bottom:4,left:`${l}%`,width:`${Math.min(w,100-l)}%`,background:"linear-gradient(135deg,#3B82F6,#60A5FA)",borderRadius:5,minWidth:3}} title={`${t.country}: ${fmt(e)} → ${fmt(x)}`}/>;
+
         })}
         <div style={{position:"absolute",right:-1,top:"50%",transform:"translateY(-50%)",width:8,height:8,borderRadius:"50%",background:"#0F172A",border:"2px solid white",boxShadow:"0 0 0 1px #0002"}}/>
       </div>
@@ -134,13 +138,40 @@ export default function App(){
   const[planEntry,setPlanEntry]=useState("");
   const[planDays,setPlanDays]=useState("");
 
-  const today=useMemo(()=>{const d=new Date();d.setHours(0,0,0,0);return d},[]);
-  const r=useMemo(()=>calc(trips,today),[trips,today]);
-  const re=useMemo(()=>r.left===0?reentry(trips):null,[trips,r.left]);
+  const [mounted, setMounted] = useState(false);
+  const [todayT, setTodayT] = useState(() => { const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); });
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('schengen_trips');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        setTrips(parsed.map(t => ({...t, pE: t.pE||parse(t.entry), pX: t.pX||parse(t.exit)})));
+      }
+    } catch(e){}
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if(mounted) localStorage.setItem('schengen_trips', JSON.stringify(trips));
+  }, [trips, mounted]);
+
+  useEffect(() => {
+    const updateToday = () => {
+      const d = new Date(); d.setHours(0,0,0,0);
+      setTodayT(d.getTime());
+    };
+    const t = setInterval(updateToday, 60000);
+    window.addEventListener('focus', updateToday);
+    return () => { clearInterval(t); window.removeEventListener('focus', updateToday); };
+  }, []);
+
+  const r=useMemo(()=>calc(trips,todayT),[trips,todayT]);
+  const re=useMemo(()=>r.left===0?reentry(trips,todayT):null,[trips,r.left,todayT]);
   const planR=useMemo(()=>{
     if(!planEntry)return null;
     const ms=maxStay(trips,planEntry),dur=planDays?parseInt(planDays):null;
-    return{max:ms,dur,over:dur?dur>ms:false,exitDate:iso(addD(parse(planEntry),ms-1))};
+    return{max:ms,dur,over:dur?dur>ms:false,exitDate:addD(parse(planEntry),ms-1)};
   },[trips,planEntry,planDays]);
 
   const pct=r.used/90;
@@ -148,9 +179,9 @@ export default function App(){
 
   const save=()=>{
     if(!entry||!exit||parse(exit)<parse(entry))return;
-    const t={entry,exit,country:country||"Schengen",label};
+    const t={entry,exit,country:country||"Schengen",label,pE:parse(entry),pX:parse(exit)};
     if(editIdx!==null){setTrips(ts=>ts.map((x,i)=>i===editIdx?t:x));setEditIdx(null);}
-    else setTrips(ts=>[...ts,t].sort((a,b)=>a.entry.localeCompare(b.entry)));
+    else setTrips(ts=>[...ts,t].sort((a,b)=>a.pE - b.pE));
     setEntry("");setExit("");setCountry("");setLabel("");setStep("dash");
   };
   const edit=i=>{const t=trips[i];setEntry(t.entry);setExit(t.exit);setCountry(t.country||"");setLabel(t.label||"");setEditIdx(i);setStep("add");};
@@ -170,7 +201,7 @@ export default function App(){
               <p style={{fontSize:11,color:"#94A3B8",margin:0}}>90/180 day rule for Indian travelers</p>
             </div>
           </div>
-          <div style={{fontSize:12,color:"#64748B",fontWeight:500}}>{fmt(today)}</div>
+          <div style={{fontSize:12,color:"#64748B",fontWeight:500}}>{fmt(todayT)}</div>
         </div>
       </header>
 
@@ -260,7 +291,7 @@ export default function App(){
             <section style={P.card}>
               <div style={{fontSize:12,fontWeight:600,color:"#94A3B8",textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>Your Status Right Now</div>
               <Ring used={r.used}/>
-              <Timeline trips={trips} ws={r.ws} today={today}/>
+              <Timeline trips={trips} ws={r.ws} today={todayT}/>
               <div style={{display:"flex",width:"100%",marginTop:20,paddingTop:18,borderTop:"1px solid #F8FAFC"}}>
                 {[{n:r.used,l:"Used"},{n:r.left,l:"Left",c:sc},{n:trips.length,l:trips.length===1?"Trip":"Trips"}].map((s,i)=>(
                   <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2,
@@ -312,8 +343,8 @@ export default function App(){
                 <h3 style={P.secTitle}>Your trips</h3>
                 <div style={{display:"flex",flexDirection:"column",gap:6}}>
                   {trips.map((t,i)=>{
-                    const e=parse(t.entry),x=parse(t.exit),days=daysBtw(e,x);
-                    const inW=x>=r.ws&&e<=today;
+                    const e=t.pE||parse(t.entry),x=t.pX||parse(t.exit),days=daysBtw(e,x);
+                    const inW=x>=r.ws&&e<=todayT;
                     return(
                       <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:"#fff",borderRadius:14,border:"1px solid #F1F5F9",opacity:inW?1:0.45,cursor:"pointer"}} onClick={()=>edit(i)}>
                         <div style={{width:36,height:36,borderRadius:10,background:inW?"#EFF6FF":"#F8FAFC",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>✈</div>
@@ -407,7 +438,7 @@ export default function App(){
                 <div style={{padding:24,background:"#FAFBFD",borderRadius:16,border:"1px solid #F1F5F9",textAlign:"center"}}>
                   <div style={{fontSize:52,fontWeight:800,color:planR.over?"#E8453C":"#22C55E",letterSpacing:"-0.04em",lineHeight:1}}>{planR.max}</div>
                   <div style={{fontSize:12,color:"#94A3B8",marginTop:6}}>max days you can stay</div>
-                  <div style={{fontSize:11,color:"#CBD5E1",marginTop:4}}>Latest exit: {fmt(parse(planR.exitDate))}</div>
+                  <div style={{fontSize:11,color:"#CBD5E1",marginTop:4}}>Latest exit: {fmt(planR.exitDate)}</div>
                   {planR.dur&&(
                     <div style={{padding:"10px 14px",borderRadius:12,marginTop:14,fontSize:13,fontWeight:500,lineHeight:1.5,
                       background:planR.over?"#FEF2F2":"#F0FDF4",color:planR.over?"#B91C1C":"#065F46"}}>
