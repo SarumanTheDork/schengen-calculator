@@ -252,6 +252,62 @@ export default function App(){
               )}
             </section>
 
+            {/* ═══ GAUGE (hero ring) ═══ */}
+            <section style={P.card}>
+              <div style={{fontSize:12,fontWeight:600,color:"#94A3B8",textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>Your Status Right Now</div>
+              <Ring used={r.used}/>
+              <Timeline trips={trips} ws={r.ws} today={todayT}/>
+              <div style={{display:"flex",width:"100%",marginTop:20,paddingTop:18,borderTop:"1px solid #F8FAFC"}}>
+                {[{n:r.used,l:"Used"},{n:r.left,l:"Left",c:sc},{n:trips.length,l:trips.length===1?"Trip":"Trips"}].map((s,i)=>(
+                  <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2,
+                    borderLeft:i?"1px solid #F1F5F9":"none"}}>
+                    <span style={{fontSize:20,fontWeight:750,color:s.c||"#0F172A"}}>{s.n}</span>
+                    <span style={{fontSize:10,color:"#94A3B8",fontWeight:500,textTransform:"uppercase",letterSpacing:0.5}}>{s.l}</span>
+                  </div>
+                ))}
+              </div>
+              {r.left===0&&re&&(
+                <div style={{...P.alert,background:"#FEF2F2",borderColor:"#FECACA",color:"#B91C1C"}}>
+                  All 90 days used. Re-entry opens <strong>{fmt(re.date)}</strong> ({re.wait} days away).
+                </div>
+              )}
+              {r.left>0&&r.left<=15&&trips.length>0&&(
+                <div style={{...P.alert,background:"#FFFBEB",borderColor:"#FDE68A",color:"#92400E"}}>
+                  Only {r.left} days left. Keep buffer days for emergencies.
+                </div>
+              )}
+              {/* Nudge if empty */}
+              {trips.length===0&&(
+                <div style={{width:"100%",marginTop:14,textAlign:"center"}}>
+                  <p style={{fontSize:13,color:"#94A3B8",margin:"0 0 4px"}}>This is showing 90 days because you haven't added any trips yet.</p>
+                  <p style={{fontSize:12,color:"#CBD5E1",margin:0}}>↓ Tap "Add Trip" above to get your real number ↓</p>
+                </div>
+              )}
+            </section>
+
+            {/* Trips */}
+            {trips.length>0&&(
+              <section>
+                <h3 style={P.secTitle}>Your trips</h3>
+                <div style={{display:"flex",flexDirection:"column",gap:6}}>
+                  {trips.map((t,i)=>{
+                    const e=t.pE||parse(t.entry),x=t.pX||parse(t.exit),days=daysBtw(e,x);
+                    const inW=x>=r.ws&&e<=todayT;
+                    return(
+                      <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:"#fff",borderRadius:14,border:"1px solid #F1F5F9",opacity:inW?1:0.45,cursor:"pointer"}} onClick={()=>edit(i)}>
+                        <div style={{width:36,height:36,borderRadius:10,background:inW?"#EFF6FF":"#F8FAFC",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>✈</div>
+                        <div style={{flex:1,minWidth:0}}>
+                          <div style={{fontSize:13,fontWeight:600,color:"#1E293B"}}>{t.country}{t.label?` · ${t.label}`:""}</div>
+                          <div style={{fontSize:11,color:"#94A3B8",marginTop:1}}>{fmtS(e)} → {fmtS(x)} · <span style={{fontWeight:600,color:inW?sc:"#94A3B8"}}>{days}d</span>{!inW&&<span style={{marginLeft:6,fontSize:10,color:"#CBD5E1"}}>expired</span>}</div>
+                        </div>
+                        <span style={{color:"#CBD5E1",fontSize:16}}>›</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
             {/* ═══ THE RULE — explained like you're 5 ═══ */}
             <section style={{background:"#fff",borderRadius:20,padding:"24px",boxShadow:"0 1px 3px #0000000a,0 8px 24px #00000006"}}>
               <h2 style={{fontSize:18,fontWeight:750,color:"#0F172A",margin:"0 0 6px",letterSpacing:"-0.02em"}}>The Schengen Rule, Simply</h2>
@@ -370,61 +426,6 @@ export default function App(){
               </div>
             </section>
 
-            {/* ═══ GAUGE (hero ring) ═══ */}
-            <section style={P.card}>
-              <div style={{fontSize:12,fontWeight:600,color:"#94A3B8",textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>Your Status Right Now</div>
-              <Ring used={r.used}/>
-              <Timeline trips={trips} ws={r.ws} today={todayT}/>
-              <div style={{display:"flex",width:"100%",marginTop:20,paddingTop:18,borderTop:"1px solid #F8FAFC"}}>
-                {[{n:r.used,l:"Used"},{n:r.left,l:"Left",c:sc},{n:trips.length,l:trips.length===1?"Trip":"Trips"}].map((s,i)=>(
-                  <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2,
-                    borderLeft:i?"1px solid #F1F5F9":"none"}}>
-                    <span style={{fontSize:20,fontWeight:750,color:s.c||"#0F172A"}}>{s.n}</span>
-                    <span style={{fontSize:10,color:"#94A3B8",fontWeight:500,textTransform:"uppercase",letterSpacing:0.5}}>{s.l}</span>
-                  </div>
-                ))}
-              </div>
-              {r.left===0&&re&&(
-                <div style={{...P.alert,background:"#FEF2F2",borderColor:"#FECACA",color:"#B91C1C"}}>
-                  All 90 days used. Re-entry opens <strong>{fmt(re.date)}</strong> ({re.wait} days away).
-                </div>
-              )}
-              {r.left>0&&r.left<=15&&trips.length>0&&(
-                <div style={{...P.alert,background:"#FFFBEB",borderColor:"#FDE68A",color:"#92400E"}}>
-                  Only {r.left} days left. Keep buffer days for emergencies.
-                </div>
-              )}
-              {/* Nudge if empty */}
-              {trips.length===0&&(
-                <div style={{width:"100%",marginTop:14,textAlign:"center"}}>
-                  <p style={{fontSize:13,color:"#94A3B8",margin:"0 0 4px"}}>This is showing 90 days because you haven't added any trips yet.</p>
-                  <p style={{fontSize:12,color:"#CBD5E1",margin:0}}>↓ Tap "Add Trip" below to get your real number ↓</p>
-                </div>
-              )}
-            </section>
-
-            {/* Trips */}
-            {trips.length>0&&(
-              <section>
-                <h3 style={P.secTitle}>Your trips</h3>
-                <div style={{display:"flex",flexDirection:"column",gap:6}}>
-                  {trips.map((t,i)=>{
-                    const e=t.pE||parse(t.entry),x=t.pX||parse(t.exit),days=daysBtw(e,x);
-                    const inW=x>=r.ws&&e<=todayT;
-                    return(
-                      <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:"#fff",borderRadius:14,border:"1px solid #F1F5F9",opacity:inW?1:0.45,cursor:"pointer"}} onClick={()=>edit(i)}>
-                        <div style={{width:36,height:36,borderRadius:10,background:inW?"#EFF6FF":"#F8FAFC",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>✈</div>
-                        <div style={{flex:1,minWidth:0}}>
-                          <div style={{fontSize:13,fontWeight:600,color:"#1E293B"}}>{t.country}{t.label?` · ${t.label}`:""}</div>
-                          <div style={{fontSize:11,color:"#94A3B8",marginTop:1}}>{fmtS(e)} → {fmtS(x)} · <span style={{fontWeight:600,color:inW?sc:"#94A3B8"}}>{days}d</span>{!inW&&<span style={{marginLeft:6,fontSize:10,color:"#CBD5E1"}}>expired</span>}</div>
-                        </div>
-                        <span style={{color:"#CBD5E1",fontSize:16}}>›</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
 
             {/* Things people get wrong */}
             <section style={{background:"#fff",borderRadius:20,padding:"24px",boxShadow:"0 1px 3px #0000000a"}}>
