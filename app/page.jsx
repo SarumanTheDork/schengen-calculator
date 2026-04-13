@@ -670,6 +670,17 @@ function ShareButtons() {
         </svg>
       </a>
       <a
+        href={`https://twitter.com/intent/tweet?text=${text}%20${url}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Share on Twitter"
+        style={{...btnStyle,background:"#1D9BF0"}}
+      >
+        <svg fill="currentColor" viewBox="0 0 24 24" style={iconStyle} aria-hidden="true">
+          <path d="M23.954 4.569a10 10 0 0 1-2.825.775 4.958 4.958 0 0 0 2.163-2.723 9.896 9.896 0 0 1-3.127 1.195 4.92 4.92 0 0 0-8.384 4.482A13.969 13.969 0 0 1 1.671 3.149a4.92 4.92 0 0 0 1.523 6.57 4.9 4.9 0 0 1-2.229-.616v.061a4.923 4.923 0 0 0 3.946 4.827 4.86 4.86 0 0 1-2.212.084 4.93 4.93 0 0 0 4.604 3.417 9.867 9.867 0 0 1-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.94 13.94 0 0 0 7.548 2.212c9.142 0 14.307-7.721 13.995-14.646a9.94 9.94 0 0 0 2.38-2.527z"/>
+        </svg>
+      </a>
+      <a
         href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}
         target="_blank"
         rel="noopener noreferrer"
