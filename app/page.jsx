@@ -238,6 +238,20 @@ export default function App(){
               </div>
             </section>
 
+            {/* Above-the-fold tool actions */}
+            <section style={{background:"#fff",borderRadius:20,padding:"18px",boxShadow:"0 1px 3px #0000000a,0 8px 24px #00000006"}}>
+              <div style={{fontSize:11,fontWeight:700,color:"#2563EB",textTransform:"uppercase",letterSpacing:0.7,marginBottom:8}}>Start tracking now</div>
+              <div style={{display:"flex",gap:10}}>
+                <button onClick={()=>setStep("add")} style={P.btnP} aria-controls="add-trip-form"><span aria-hidden="true" style={{fontSize:20,lineHeight:1}}>+</span> Add Trip</button>
+                <button onClick={()=>setStep("plan")} style={P.btnS} aria-controls="plan-trip-form">Plan Future Trip</button>
+              </div>
+              {trips.length===0&&(
+                <p style={{fontSize:12,color:"#64748B",margin:"10px 2px 0",lineHeight:1.6}}>
+                  First time? Start with <strong style={{color:"#1E293B"}}>"+ Add Trip"</strong> and enter passport entry/exit dates.
+                </p>
+              )}
+            </section>
+
             {/* ═══ THE RULE — explained like you're 5 ═══ */}
             <section style={{background:"#fff",borderRadius:20,padding:"24px",boxShadow:"0 1px 3px #0000000a,0 8px 24px #00000006"}}>
               <h2 style={{fontSize:18,fontWeight:750,color:"#0F172A",margin:"0 0 6px",letterSpacing:"-0.02em"}}>The Schengen Rule, Simply</h2>
@@ -388,23 +402,6 @@ export default function App(){
                 </div>
               )}
             </section>
-
-            {/* Actions */}
-            <div style={{display:"flex",gap:10}}>
-              <button onClick={()=>setStep("add")} style={P.btnP} aria-controls="add-trip-form"><span aria-hidden="true" style={{fontSize:20,lineHeight:1}}>+</span> Add Trip</button>
-              <button onClick={()=>setStep("plan")} style={P.btnS} aria-controls="plan-trip-form">Plan Future Trip</button>
-            </div>
-
-            {/* First-time helper text under buttons */}
-            {trips.length===0&&(
-              <div style={{textAlign:"center",padding:"0 10px"}}>
-                <p style={{fontSize:13,color:"#64748B",margin:0,lineHeight:1.6}}>
-                  <strong style={{color:"#1E293B"}}>First time?</strong> Grab your passport and tap <strong style={{color:"#3B82F6"}}>"+ Add Trip"</strong>. 
-                  Enter the dates from your entry and exit stamps for each Schengen visit. 
-                  Haven't been to Europe yet? Hit <strong style={{color:"#475569"}}>"Plan Future Trip"</strong> to see how long you can stay.
-                </p>
-              </div>
-            )}
 
             {/* Trips */}
             {trips.length>0&&(
