@@ -532,14 +532,19 @@ export default function App(){
           </SideCard>
 
           {/* CTA */}
-          <div style={{background:"linear-gradient(135deg,#3B82F6,#2563EB)",borderRadius:16,padding:"20px",color:"#fff",textAlign:"center"}}>
-            <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>Planning a Schengen trip?</div>
-            <p style={{fontSize:12,opacity:0.85,margin:"0 0 14px",lineHeight:1.6}}>
+          <div style={{background:"linear-gradient(135deg,#3B82F6,#2563EB)",borderRadius:20,padding:"22px 18px",color:"#fff",textAlign:"center",boxShadow:"0 10px 24px #2563eb40"}}>
+            <div style={{fontSize:18,fontWeight:800,marginBottom:10,letterSpacing:"-0.02em"}}>Planning a Schengen trip?</div>
+            <p style={{fontSize:12,opacity:0.92,margin:"0 0 16px",lineHeight:1.8}}>
               Get our free document checklist tailored to your profile — self-employed, salaried, or student.
             </p>
-            <div style={{display:"inline-block",background:"#fff",color:"#2563EB",fontSize:13,fontWeight:700,padding:"10px 24px",borderRadius:10,cursor:"pointer"}} aria-label="Get Free Checklist">
-              Get Free Checklist →
-            </div>
+            <a
+              href="./checklist"
+              style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%",background:"#fff",color:"#2563EB",fontSize:15,fontWeight:800,padding:"12px 18px",borderRadius:14,cursor:"pointer",border:"none",fontFamily:"inherit",boxShadow:"0 1px 2px #0000001f",textDecoration:"none"}}
+              aria-label="Get Free Checklist"
+            >
+              Get Free Checklist
+              <span aria-hidden="true" style={{fontSize:24,lineHeight:0.8}}>→</span>
+            </a>
           </div>
         </aside>
       </div>
