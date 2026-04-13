@@ -525,6 +525,12 @@ export default function App(){
             </div>
           </SideCard>
 
+          {/* Share */}
+          <SideCard emoji="🔥" title="Share with friends" accent="#FEF2F2" accentText="#B91C1C">
+            <p style={{margin:"0 0 10px",fontSize:12,color:"#64748B",lineHeight:1.6}}>Help other travelers accurately calculate their days by sharing this free tool!</p>
+            <ShareButtons />
+          </SideCard>
+
           {/* CTA */}
           <div style={{background:"linear-gradient(135deg,#3B82F6,#2563EB)",borderRadius:16,padding:"20px",color:"#fff",textAlign:"center"}}>
             <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>Planning a Schengen trip?</div>
@@ -605,6 +611,30 @@ function FaqItem({q,a}){
       </div>
       {open&&<p style={{fontSize:12,color:"#64748B",lineHeight:1.7,margin:"8px 0 0"}}>{a}</p>}
     </button>
+  );
+}
+
+/* ─── Styles ─── */
+function ShareButtons() {
+  const url = encodeURIComponent("https://xnomadic.com/tools/schengen-calculator/");
+  const text = encodeURIComponent("Track your 90-day Schengen limit effortlessly. Free calculator for Indian travelers: ");
+  const title = encodeURIComponent("Schengen 90/180 Day Calculator");
+  
+  return (
+    <div style={{display:"flex",gap:10,marginTop:6}}>
+      <a href={`https://api.whatsapp.com/send?text=${text}%20${url}`} target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" style={{width:36,height:36,borderRadius:10,background:"#25D366",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",textDecoration:"none"}}>
+        <svg fill="currentColor" viewBox="0 0 24 24" width="18" height="18"><path d="M12.031 21.096c-1.897 0-3.754-.509-5.385-1.474l-.386-.228-4.004 1.05 1.068-3.905-.25-.398A10.985 10.985 0 0 1 1.393 10.99 11.028 11.028 0 0 1 12.031.022a11.023 11.023 0 0 1 11.027 10.967 11.024 11.024 0 0 1-11.027 11.092ZM6.368 18.067a9.308 9.308 0 0 0 5.663 1.897 9.294 9.294 0 0 0 9.293-9.308 9.295 9.295 0 0 0-9.293-9.309 9.295 9.295 0 0 0-9.293 9.309c0 1.637.426 3.23 1.233 4.654l.115.203-.63 2.302 2.355-.618.204.12Z"/><path d="m17.513 14.129-.026-.067c-.204-.378-.65-.568-1.339-.81-.663-.256-1.926-.959-2.208-1.066-.312-.135-.551-.15-.768.161-.243.378-.856 1.08-1.053 1.282-.191.203-.41.229-.687.108-.276-.121-1.35-.499-2.574-1.587-.945-.845-1.588-1.89-1.78-2.228-.19-.324-.037-.472.109-.593.12-.095.303-.325.432-.486.136-.162.176-.283.27-.472.096-.189.041-.365-.027-.486-.067-.135-.61-1.472-.851-2.012-.228-.528-.458-.459-.621-.459-.162 0-.35-.014-.525-.014-.19 0-.486.068-.742.338-.27.27-1.027 1.002-1.027 2.441 0 1.444 1.053 2.847 1.202 3.037.15.189 2.052 3.144 4.965 4.412 1.957.85 2.508.824 3.414.688.756-.12 1.926-.783 2.196-1.54.27-.756.27-1.403.189-1.539Z"/></svg>
+      </a>
+      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" style={{width:36,height:36,borderRadius:10,background:"#0A66C2",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",textDecoration:"none"}}>
+        <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href={`https://www.reddit.com/submit?url=${url}&title=${title}`} target="_blank" rel="noopener noreferrer" aria-label="Share on Reddit" style={{width:36,height:36,borderRadius:10,background:"#FF4500",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",textDecoration:"none"}}>
+        <svg fill="currentColor" viewBox="0 0 24 24" width="18" height="18"><path d="M22 11.5a2.5 2.5 0 0 0-3.32-2.37c-.77-.47-1.74-.78-2.8-.83l1-3.1 2.35.53a2 2 0 1 0 .6-1.92l-2.65-.6-1.13 3.52c-1.12.03-2.14.34-2.95.82a2.5 2.5 0 0 0-3.6 2.35c0 1.04.64 1.95 1.56 2.34-.04.18-.06.36-.06.56 0 3.31 3.13 6 7 6s7-2.69 7-6c0-.2-.02-.38-.07-.56A2.5 2.5 0 0 0 22 11.5zm-15.5 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0zm5.5 4.5c-1.63 0-2.85-.7-2.93-.75a.75.75 0 1 1 .96-1.18c.03.02 1.02.6 1.97.6.93 0 1.83-.55 1.87-.57a.75.75 0 1 1 .86 1.25c-.1.06-1.28.8-2.73.8v-.15zm2.5-3.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/></svg>
+      </a>
+      <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" style={{width:36,height:36,borderRadius:10,background:"#1877F2",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",textDecoration:"none"}}>
+        <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+    </div>
   );
 }
 
