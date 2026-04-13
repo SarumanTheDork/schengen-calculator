@@ -198,7 +198,7 @@ export default function App(){
             </div>
             <div>
               <h1 style={{fontSize:16,fontWeight:750,margin:0,color:"#0F172A",letterSpacing:"-0.02em"}}>Schengen Calculator</h1>
-              <p style={{fontSize:11,color:"#94A3B8",margin:0}}>90/180 day rule for Indian travelers</p>
+              <p style={{fontSize:11,color:"#94A3B8",margin:0}}>The most comprehensive 90/180 planner for Indian travelers</p>
             </div>
           </div>
           <div style={{fontSize:12,color:"#64748B",fontWeight:500}}>{fmt(todayT)}</div>
@@ -211,6 +211,31 @@ export default function App(){
         <main style={P.mainCol}>
 
           {step==="dash"&&(<>
+
+            {/* Positioning */}
+            <section style={{background:"linear-gradient(135deg,#0F172A,#1E293B)",borderRadius:20,padding:"22px 24px",boxShadow:"0 10px 24px #0f172a24"}}>
+              <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"#1E40AF",color:"#DBEAFE",fontSize:10,fontWeight:700,padding:"4px 10px",borderRadius:999,textTransform:"uppercase",letterSpacing:0.6,marginBottom:10}}>
+                Built for serious visa planning
+              </div>
+              <h2 style={{fontSize:24,fontWeight:800,color:"#fff",margin:"0 0 10px",letterSpacing:"-0.02em",lineHeight:1.2}}>
+                The most comprehensive Schengen day tracker for Indian travelers
+              </h2>
+              <p style={{fontSize:13,color:"#BFDBFE",margin:"0 0 14px",lineHeight:1.7}}>
+                Not just day counting. This combines 90/180 accuracy, future trip simulation, overstay warnings, country logic, and a detailed visa-file checklist flow in one place.
+              </p>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:8}}>
+                {[
+                  "Precise rolling-window engine",
+                  "Future-trip safety simulation",
+                  "India-focused visa prep content",
+                  "Overstay risk guardrails"
+                ].map((i)=>(
+                  <div key={i} style={{fontSize:11,fontWeight:600,color:"#E2E8F0",background:"#ffffff12",border:"1px solid #ffffff1f",padding:"8px 10px",borderRadius:10}}>
+                    {i}
+                  </div>
+                ))}
+              </div>
+            </section>
 
             {/* ═══ THE RULE — explained like you're 5 ═══ */}
             <section style={{background:"#fff",borderRadius:20,padding:"24px",boxShadow:"0 1px 3px #0000000a,0 8px 24px #00000006"}}>

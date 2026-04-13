@@ -2,8 +2,8 @@ import './globals.css';
 
 export const metadata = {
   metadataBase: new URL('https://xnomadic.com'),
-  title: 'Schengen 90/180 Day Calculator — xnomadic',
-  description: 'Free Schengen calculator for Indian travelers. Track your 90-day limit, plan future trips, and avoid overstaying in the Schengen Area.',
+  title: 'Most Comprehensive Schengen 90/180 Calculator for Indians — xnomadic',
+  description: 'The most comprehensive Schengen calculator for Indian travelers: track 90/180 days, simulate future trips, avoid overstays, and download a detailed visa-file checklist.',
   keywords: ['schengen calculator', '90 180 rule', 'schengen visa calculator', 'india schengen', 'europe visa calculator', 'schengen days left', 'schengen overstay checker'],
   authors: [{ name: 'xnomadic' }],
   creator: 'xnomadic',
@@ -13,8 +13,8 @@ export const metadata = {
     apple: [{ url: '/apple-icon', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
-    title: 'Schengen 90/180 Day Calculator — xnomadic',
-    description: 'Track your Schengen days. Know exactly how long you can stay in Europe without overstaying.',
+    title: 'Most Comprehensive Schengen 90/180 Calculator — xnomadic',
+    description: 'Track Schengen days, simulate future stays, and prep with an India-focused checklist in one tool.',
     url: '/tools/schengen-calculator/',
     siteName: 'xnomadic Calculator',
     locale: 'en_US',
@@ -23,8 +23,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Schengen 90/180 Day Calculator',
-    description: 'Free Schengen calculator for Indian travelers. Plan future trips and avoid overstaying.',
+    title: 'Most Comprehensive Schengen 90/180 Calculator',
+    description: 'One tool for day tracking, future stay simulation, and visa-file prep for Indian travelers.',
     creator: '@xnomadic',
     images: ['/twitter-image'],
   },
