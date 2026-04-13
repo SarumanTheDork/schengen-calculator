@@ -3,6 +3,35 @@ import { NextResponse } from "next/server";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const VALID_PROFILES = new Set(["salaried", "selfEmployed", "student"]);
 
+async function upsertHubSpotLead(token, lead) {
+  const payload = {
+    inputs: [
+      {
+        idProperty: "email",
+        id: lead.email,
+        properties: {
+          email: lead.email,
+          lifecyclestage: "lead",
+        },
+      },
+    ],
+  };
+
+  const res = await fetch("https://api.hubapi.com/crm/v3/objects/contacts/batch/upsert", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`HubSpot upsert failed: ${res.status} ${body}`);
+  }
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
@@ -26,6 +55,16 @@ export async function POST(request) {
 
     // Always log server-side so there is at least capture visibility.
     console.log("[lead_capture]", lead);
+
+    const hubspotToken = process.env.HUBSPOT_ACCESS_TOKEN;
+    if (hubspotToken) {
+      try {
+        await upsertHubSpotLead(hubspotToken, lead);
+      } catch (e) {
+        console.error("[lead_capture_hubspot_error]", e);
+        return NextResponse.json({ error: "Failed to save lead to HubSpot." }, { status: 502 });
+      }
+    }
 
     const webhook = process.env.LEADS_WEBHOOK_URL;
     if (webhook) {
