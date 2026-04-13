@@ -1,5 +1,6 @@
 'use client';
 import { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 
 /* ═══════════════════════════════════════════════════════════════════
    SCHENGEN 90/180 CALCULATOR — xnomadic
@@ -562,14 +563,14 @@ export default function App(){
             <p style={{fontSize:12,opacity:0.92,margin:"0 0 16px",lineHeight:1.8}}>
               Get our free document checklist tailored to your profile — self-employed, salaried, or student.
             </p>
-            <a
-              href="./checklist"
+            <Link
+              href="/checklist"
               style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%",background:"#fff",color:"#2563EB",fontSize:15,fontWeight:800,padding:"12px 18px",borderRadius:14,cursor:"pointer",border:"none",fontFamily:"inherit",boxShadow:"0 1px 2px #0000001f",textDecoration:"none"}}
               aria-label="Get Free Checklist"
             >
               Get Free Checklist
               <span aria-hidden="true" style={{fontSize:24,lineHeight:0.8}}>→</span>
-            </a>
+            </Link>
           </div>
         </aside>
       </div>

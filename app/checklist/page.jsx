@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import Link from "next/link";
 
 const COMMON_SECTIONS = [
   {
@@ -176,9 +177,9 @@ export default function ChecklistPage() {
   return (
     <main style={{ minHeight: "100vh", background: "linear-gradient(180deg,#FAFBFD,#F1F5F9)", padding: "24px 16px" }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
-        <a href="../" style={{ fontSize: 13, color: "#2563EB", textDecoration: "none", fontWeight: 600 }}>
+        <Link href="/" style={{ fontSize: 13, color: "#2563EB", textDecoration: "none", fontWeight: 600 }}>
           ← Back to calculator
-        </a>
+        </Link>
 
         <section style={{ marginTop: 12, background: "#fff", borderRadius: 18, padding: 22, border: "1px solid #E2E8F0", boxShadow: "0 8px 28px #00000012" }}>
           <h1 style={{ margin: 0, color: "#0F172A", fontSize: 28, fontWeight: 800, letterSpacing: "-0.02em" }}>
