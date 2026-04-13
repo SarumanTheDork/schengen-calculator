@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const COMMON_SECTIONS = [
   {
@@ -112,15 +113,36 @@ const PROFILE_LABEL = {
 };
 
 export default function ChecklistPage() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [profile, setProfile] = useState("salaried");
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const downloadChecklist = () => {
+  const downloadChecklist = async () => {
     const emailValue = email.trim();
-    if (emailValue && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
-      setError("Enter a valid email or leave it blank.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    setSubmitting(true);
+    const source = searchParams.get("src") || "direct";
+    try {
+      const leadRes = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailValue, profile, source }),
+      });
+      if (!leadRes.ok) {
+        setError("Could not save your request right now. Please try again.");
+        setSubmitting(false);
+        return;
+      }
+    } catch {
+      setError("Network error while saving your request. Please retry.");
+      setSubmitting(false);
       return;
     }
 
@@ -136,7 +158,7 @@ export default function ChecklistPage() {
       "# xnomadic Schengen Visa File Checklist",
       "",
       `**Profile:** ${PROFILE_LABEL[profile]}`,
-      `**Requested by:** ${emailValue || "Not provided"}`,
+      `**Requested by:** ${emailValue}`,
       `**Generated on:** ${today.toLocaleDateString("en-IN")}`,
       "",
       "Use this as your working prep sheet. Tick items only after you have verified date and name consistency across all pages.",
@@ -172,6 +194,7 @@ export default function ChecklistPage() {
 
     setError("");
     setDone(true);
+    setSubmitting(false);
   };
 
   return (
@@ -191,7 +214,7 @@ export default function ChecklistPage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div>
-              <label style={{ display: "block", marginBottom: 6, fontSize: 12, color: "#475569", fontWeight: 600 }}>Email (optional)</label>
+              <label style={{ display: "block", marginBottom: 6, fontSize: 12, color: "#475569", fontWeight: 600 }}>Email</label>
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -200,7 +223,7 @@ export default function ChecklistPage() {
                 style={{ width: "100%", boxSizing: "border-box", padding: "11px 14px", borderRadius: 12, border: "1.5px solid #E2E8F0", background: "#FAFBFD", fontSize: 14, color: "#1E293B", fontFamily: "inherit" }}
               />
               <p style={{ marginTop: 6, fontSize: 11, color: "#64748B", lineHeight: 1.5 }}>
-                Privacy: this email is not sent to any server right now; it is only used locally in your downloaded file.
+                Privacy: we store this email to send product updates and checklist improvements. We never sell your data.
               </p>
             </div>
 
@@ -222,9 +245,10 @@ export default function ChecklistPage() {
 
             <button
               onClick={downloadChecklist}
+              disabled={submitting}
               style={{ marginTop: 2, border: "none", borderRadius: 12, background: "#2563EB", color: "#fff", fontSize: 14, fontWeight: 700, padding: "12px 16px", cursor: "pointer", fontFamily: "inherit" }}
             >
-              Download Comprehensive Checklist
+              {submitting ? "Saving request..." : "Download Comprehensive Checklist"}
             </button>
           </div>
         </section>

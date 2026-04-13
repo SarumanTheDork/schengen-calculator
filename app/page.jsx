@@ -605,7 +605,7 @@ export default function App(){
               Get our free document checklist tailored to your profile — self-employed, salaried, or student.
             </p>
             <Link
-              href="/checklist"
+              href="/checklist?src=home_sidebar_cta"
               style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%",background:"#fff",color:"#2563EB",fontSize:15,fontWeight:800,padding:"12px 18px",borderRadius:14,cursor:"pointer",border:"none",fontFamily:"inherit",boxShadow:"0 1px 2px #0000001f",textDecoration:"none"}}
               aria-label="Get Free Checklist"
             >

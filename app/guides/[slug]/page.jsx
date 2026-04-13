@@ -120,6 +120,16 @@ export default function GuidePage({ params }) {
             </section>
           ))}
         </div>
+
+        <section style={{ marginTop: 16, border: "1px solid #DBEAFE", borderRadius: 12, padding: "14px 16px", background: "#EFF6FF" }}>
+          <h2 style={{ margin: "0 0 8px", color: "#1E40AF", fontSize: 16 }}>Need the full checklist pack?</h2>
+          <p style={{ margin: "0 0 10px", color: "#1E3A8A", fontSize: 13, lineHeight: 1.7 }}>
+            Download the profile-specific comprehensive checklist and use it as your final visa-file QA sheet.
+          </p>
+          <Link href={`/checklist?src=guide_${params.slug}`} style={{ display: "inline-block", textDecoration: "none", background: "#2563EB", color: "#fff", fontSize: 13, fontWeight: 700, padding: "10px 14px", borderRadius: 10 }}>
+            Get Comprehensive Checklist
+          </Link>
+        </section>
       </article>
     </main>
   );
