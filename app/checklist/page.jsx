@@ -2,38 +2,107 @@
 
 import { useState } from "react";
 
-const CHECKLIST_BY_PROFILE = {
+const COMMON_SECTIONS = [
+  {
+    title: "Core Visa File (Every Applicant)",
+    items: [
+      "Passport: issued within last 10 years, valid 3+ months after planned return, 2 blank pages",
+      "All old passports (if available), especially those with Schengen/UK/US visas",
+      "Visa application form + appointment confirmation + VFS checklist printout",
+      "Cover letter with exact trip purpose, dates, route, and who is funding what",
+      "Two recent photos (35 x 45 mm, white background, matte finish, neutral expression)",
+      "Round-trip flight reservation with PNR and date consistency across all documents",
+      "Hotel booking for every night OR invitation letter + host ID/proof of address",
+      "Day-by-day itinerary (city, date, transport, stay, activity) matched to bookings",
+      "Travel insurance: EUR 30,000 minimum, entire Schengen area, full travel period plus buffer",
+    ],
+  },
+  {
+    title: "Financial Proof Standards",
+    items: [
+      "Personal bank statements (last 6 months), stamped or digitally verifiable",
+      "Healthy balance trend; avoid sudden cash spikes right before application",
+      "Source explanations for large credits (salary, transfer, FD break, business payment)",
+      "Latest ITR acknowledgment + computation (prefer 2-3 assessment years)",
+      "PAN and Aadhaar copy (carry originals for appointment day)",
+      "If sponsor-funded: sponsor ID, relationship proof, signed sponsorship letter, sponsor finances",
+    ],
+  },
+  {
+    title: "Trip Credibility Signals",
+    items: [
+      "Logical route and duration relative to your income, leave, and profile",
+      "First entry should usually match issuing embassy jurisdiction and major stay",
+      "Document dates must match exactly (itinerary, leave letter, flights, insurance)",
+      "Keep emergency buffer days to avoid accidental overstay from delays",
+    ],
+  },
+  {
+    title: "Pre-Submission QA",
+    items: [
+      "Name spelling exactly as passport on every document and booking",
+      "Passport number consistent everywhere (forms, insurance, bookings)",
+      "Sign all required fields; no blank mandatory sections in form",
+      "Carry originals + one clean photocopy set in order of checklist",
+      "Save one PDF bundle copy for your own records",
+    ],
+  },
+];
+
+const PROFILE_SECTIONS = {
   salaried: [
-    "Passport (valid for 6+ months)",
-    "Recent photo (35mm x 45mm, white background)",
-    "Last 3 months salary slips",
-    "Last 6 months bank statements (stamped)",
-    "Employment letter + leave approval",
-    "ITR for last 2 years",
-    "Flight and hotel reservations",
-    "Travel insurance (min EUR 30,000 cover)",
+    {
+      title: "Employment Documents (Salaried)",
+      items: [
+        "Employment verification letter on company letterhead with role, DOJ, and salary",
+        "Leave approval letter with exact approved dates matching itinerary",
+        "Last 3 to 6 salary slips with company stamp/sign if available",
+        "Form 16 and latest compensation structure (if available)",
+        "HR contact details included for verification calls",
+      ],
+    },
   ],
   selfEmployed: [
-    "Passport (valid for 6+ months)",
-    "Recent photo (35mm x 45mm, white background)",
-    "Business registration proof (GST/Udyam/Shop Act)",
-    "Business bank statements (6 months)",
-    "Personal bank statements (6 months)",
-    "ITR + business financials for last 2 years",
-    "Cover letter explaining trip purpose",
-    "Flight and hotel reservations + travel insurance",
+    {
+      title: "Business Documents (Self-employed)",
+      items: [
+        "Business registration: GST/Udyam/Shop Act/Partnership deed/COI as applicable",
+        "Business bank statements (6 months) + personal statements (6 months)",
+        "Company ITR + personal ITR + audited/CA-certified P&L and balance sheet",
+        "Recent GST returns or invoices proving active business operations",
+        "Business cover letter on letterhead explaining ongoing operations during travel",
+      ],
+    },
   ],
   student: [
-    "Passport (valid for 6+ months)",
-    "Recent photo (35mm x 45mm, white background)",
-    "Current bonafide/student certificate",
-    "No-objection certificate from institution",
-    "Sponsor letter (if parent/guardian sponsoring)",
-    "Sponsor bank statements + ITR",
-    "Flight and hotel reservations",
-    "Travel insurance (min EUR 30,000 cover)",
+    {
+      title: "Academic + Sponsorship (Student)",
+      items: [
+        "Bonafide certificate (current semester) + valid ID card copy",
+        "No-objection certificate from college/university with leave period",
+        "If sponsored by parent/guardian: notarized sponsorship letter",
+        "Sponsor relationship proof (birth certificate/passport names/family register)",
+        "Sponsor bank statements, ITR, and employment/business proof",
+      ],
+    },
   ],
 };
+
+const EMBASSY_NOTES = [
+  "France: strong itinerary quality and financial consistency usually matter more than over-documenting.",
+  "Switzerland: clean file order + clear purpose statement improves processing confidence.",
+  "Italy/Spain: booking consistency and realistic daily plan reduce query chances.",
+  "Germany: documentation discipline is strict; avoid missing signatures/annexures.",
+  "Always follow latest embassy/VFS checklist over any generic internet list.",
+];
+
+const RED_FLAGS = [
+  "Fresh large cash deposits with no source trail",
+  "Dummy/cancel-prone bookings that conflict with itinerary",
+  "Applying through an embassy that is not your main destination",
+  "Employment/college letters without contact details or clear dates",
+  "Contradictions between cover letter, form, and financial profile",
+];
 
 const PROFILE_LABEL = {
   salaried: "Salaried",
@@ -48,30 +117,53 @@ export default function ChecklistPage() {
   const [done, setDone] = useState(false);
 
   const downloadChecklist = () => {
-    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-    if (!ok) {
-      setError("Please enter a valid email address.");
+    const emailValue = email.trim();
+    if (emailValue && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+      setError("Enter a valid email or leave it blank.");
       return;
     }
 
     const today = new Date();
-    const lines = CHECKLIST_BY_PROFILE[profile];
+    const profileSections = PROFILE_SECTIONS[profile] || [];
+    const allSections = [...COMMON_SECTIONS, ...profileSections];
+    const sectionLines = allSections.flatMap((section) => [
+      `## ${section.title}`,
+      ...section.items.map((item, i) => `${i + 1}. ${item}`),
+      "",
+    ]);
     const content = [
-      "Schengen Document Checklist",
-      `Profile: ${PROFILE_LABEL[profile]}`,
-      `Requested by: ${email.trim()}`,
-      `Generated on: ${today.toLocaleDateString("en-IN")}`,
+      "# xnomadic Schengen Visa File Checklist",
       "",
-      ...lines.map((item, i) => `${i + 1}. ${item}`),
+      `**Profile:** ${PROFILE_LABEL[profile]}`,
+      `**Requested by:** ${emailValue || "Not provided"}`,
+      `**Generated on:** ${today.toLocaleDateString("en-IN")}`,
       "",
-      "Always confirm embassy-specific requirements before appointment.",
+      "Use this as your working prep sheet. Tick items only after you have verified date and name consistency across all pages.",
+      "",
+      ...sectionLines,
+      "## Embassy-Specific Notes (Quick Guide)",
+      ...EMBASSY_NOTES.map((item, i) => `${i + 1}. ${item}`),
+      "",
+      "## Refusal Risk Triggers to Avoid",
+      ...RED_FLAGS.map((item, i) => `${i + 1}. ${item}`),
+      "",
+      "## Final Day-Before-Appointment Pack Order",
+      "1. Passport + old passports",
+      "2. Application form + appointment letter",
+      "3. Cover letter + itinerary",
+      "4. Flights + hotels + insurance",
+      "5. Financials (bank + ITR + profile-specific docs)",
+      "6. Employment/business/student support letters",
+      "7. Photographs + photocopy set + backup soft copies",
+      "",
+      "Note: Embassy and VFS checklists can change. Always verify official requirements right before submission.",
     ].join("\n");
 
-    const file = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const file = new Blob([content], { type: "text/markdown;charset=utf-8" });
     const fileUrl = URL.createObjectURL(file);
     const a = document.createElement("a");
     a.href = fileUrl;
-    a.download = `schengen-checklist-${profile}.txt`;
+    a.download = `xnomadic-schengen-checklist-${profile}.md`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -93,12 +185,12 @@ export default function ChecklistPage() {
             Free Schengen Checklist
           </h1>
           <p style={{ margin: "8px 0 18px", fontSize: 14, color: "#475569", lineHeight: 1.7 }}>
-            Get a profile-specific starter checklist instantly. Pick your profile, add your email, and download.
+            Download a detailed, profile-specific Schengen file checklist built for Indian applicants.
           </p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div>
-              <label style={{ display: "block", marginBottom: 6, fontSize: 12, color: "#475569", fontWeight: 600 }}>Email</label>
+              <label style={{ display: "block", marginBottom: 6, fontSize: 12, color: "#475569", fontWeight: 600 }}>Email (optional)</label>
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -106,6 +198,9 @@ export default function ChecklistPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 style={{ width: "100%", boxSizing: "border-box", padding: "11px 14px", borderRadius: 12, border: "1.5px solid #E2E8F0", background: "#FAFBFD", fontSize: 14, color: "#1E293B", fontFamily: "inherit" }}
               />
+              <p style={{ marginTop: 6, fontSize: 11, color: "#64748B", lineHeight: 1.5 }}>
+                Privacy: this email is not sent to any server right now; it is only used locally in your downloaded file.
+              </p>
             </div>
 
             <div>
@@ -128,7 +223,7 @@ export default function ChecklistPage() {
               onClick={downloadChecklist}
               style={{ marginTop: 2, border: "none", borderRadius: 12, background: "#2563EB", color: "#fff", fontSize: 14, fontWeight: 700, padding: "12px 16px", cursor: "pointer", fontFamily: "inherit" }}
             >
-              Download Free Checklist
+              Download Comprehensive Checklist
             </button>
           </div>
         </section>
