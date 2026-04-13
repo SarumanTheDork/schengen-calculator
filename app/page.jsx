@@ -463,6 +463,12 @@ export default function App(){
             <p style={{marginTop:10,fontSize:11,color:"#94A3B8",lineHeight:1.6}}>Source: European Commission visa statistics 2024</p>
           </SideCard>
 
+          {/* Share */}
+          <SideCard emoji="🔥" title="Share with friends" accent="#FEF2F2" accentText="#B91C1C">
+            <p style={{margin:"0 0 10px",fontSize:12,color:"#64748B",lineHeight:1.6}}>Help other travelers accurately calculate their days by sharing this free tool!</p>
+            <ShareButtons />
+          </SideCard>
+
           {/* EES Alert */}
           <SideCard emoji="🔔" title="New: Entry/Exit System (EES)" accent="#FEF3C7" accentText="#92400E">
             <p style={{margin:0}}>From 2026, all Schengen borders digitally record your entry and exit. <strong style={{color:"#1E293B"}}>Overstays are now impossible to hide.</strong> Your biometric data creates a permanent travel footprint. Accurate day tracking is no longer optional — it's essential.</p>
@@ -523,12 +529,6 @@ export default function App(){
             <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
               {SCHENGEN.map(c=><span key={c} style={{fontSize:10,color:"#475569",background:"#F1F5F9",padding:"3px 8px",borderRadius:5}}>{c}</span>)}
             </div>
-          </SideCard>
-
-          {/* Share */}
-          <SideCard emoji="🔥" title="Share with friends" accent="#FEF2F2" accentText="#B91C1C">
-            <p style={{margin:"0 0 10px",fontSize:12,color:"#64748B",lineHeight:1.6}}>Help other travelers accurately calculate their days by sharing this free tool!</p>
-            <ShareButtons />
           </SideCard>
 
           {/* CTA */}
