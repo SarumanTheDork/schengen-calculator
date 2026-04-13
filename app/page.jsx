@@ -163,7 +163,7 @@ export default function App(){
         <div style={P.headerInner}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <div style={{width:34,height:34,borderRadius:10,background:"#EFF6FF",display:"flex",alignItems:"center",justifyContent:"center"}}>
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#3B82F6" strokeWidth="1.5"/><path d="M5 10c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round"/><circle cx="10" cy="10" r="1.5" fill="#3B82F6"/></svg>
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#3B82F6" strokeWidth="1.5"/><path d="M5 10c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round"/><circle cx="10" cy="10" r="1.5" fill="#3B82F6"/></svg>
             </div>
             <div>
               <h1 style={{fontSize:16,fontWeight:750,margin:0,color:"#0F172A",letterSpacing:"-0.02em"}}>Schengen Calculator</h1>
@@ -291,8 +291,8 @@ export default function App(){
 
             {/* Actions */}
             <div style={{display:"flex",gap:10}}>
-              <button onClick={()=>setStep("add")} style={P.btnP}><span style={{fontSize:20,lineHeight:1}}>+</span> Add Trip</button>
-              <button onClick={()=>setStep("plan")} style={P.btnS}>Plan Future Trip</button>
+              <button onClick={()=>setStep("add")} style={P.btnP} aria-controls="add-trip-form"><span aria-hidden="true" style={{fontSize:20,lineHeight:1}}>+</span> Add Trip</button>
+              <button onClick={()=>setStep("plan")} style={P.btnS} aria-controls="plan-trip-form">Plan Future Trip</button>
             </div>
 
             {/* First-time helper text under buttons */}
@@ -365,10 +365,10 @@ export default function App(){
 
           {/* Add/Edit */}
           {step==="add"&&(
-            <section style={P.card}>
+            <section id="add-trip-form" style={P.card}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
                 <h2 style={{fontSize:18,fontWeight:750,margin:0,color:"#0F172A"}}>{editIdx!==null?"Edit Trip":"Add a Trip"}</h2>
-                <button onClick={cancel} style={P.xBtn}>✕</button>
+                <button onClick={cancel} style={P.xBtn} aria-label="Close edit trip form">✕</button>
               </div>
               <p style={{fontSize:13,color:"#94A3B8",margin:"0 0 18px"}}>Enter dates from your passport stamps.</p>
               <div style={P.fg}><label style={P.lbl}>When did you enter?</label><input type="date" value={entry} onChange={e=>setEntry(e.target.value)} style={P.inp}/></div>
@@ -395,10 +395,10 @@ export default function App(){
 
           {/* Plan */}
           {step==="plan"&&(
-            <section style={P.card}>
+            <section id="plan-trip-form" style={P.card}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
                 <h2 style={{fontSize:18,fontWeight:750,margin:0}}>Plan a Future Trip</h2>
-                <button onClick={()=>{setStep("dash");setPlanEntry("");setPlanDays("")}} style={P.xBtn}>✕</button>
+                <button onClick={()=>{setStep("dash");setPlanEntry("");setPlanDays("")}} style={P.xBtn} aria-label="Close plan future trip form">✕</button>
               </div>
               <p style={{fontSize:13,color:"#94A3B8",margin:"0 0 18px"}}>See how many days you can stay.</p>
               <div style={P.fg}><label style={P.lbl}>When do you want to enter?</label><input type="date" value={planEntry} onChange={e=>setPlanEntry(e.target.value)} style={P.inp}/></div>
@@ -500,12 +500,61 @@ export default function App(){
             <p style={{fontSize:12,opacity:0.85,margin:"0 0 14px",lineHeight:1.6}}>
               Get our free document checklist tailored to your profile — self-employed, salaried, or student.
             </p>
-            <div style={{display:"inline-block",background:"#fff",color:"#2563EB",fontSize:13,fontWeight:700,padding:"10px 24px",borderRadius:10,cursor:"pointer"}}>
+            <div style={{display:"inline-block",background:"#fff",color:"#2563EB",fontSize:13,fontWeight:700,padding:"10px 24px",borderRadius:10,cursor:"pointer"}} aria-label="Get Free Checklist">
               Get Free Checklist →
             </div>
           </div>
         </aside>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebApplication",
+                "name": "Schengen 90/180 Day Calculator",
+                "url": "https://xnomadic.com/tools/schengen-calculator/",
+                "applicationCategory": "TravelApplication",
+                "operatingSystem": "Any",
+                "description": "Free Schengen calculator for Indian travelers. Track your 90-day limit, plan future trips, and avoid overstaying in the Schengen Area."
+              },
+              {
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "What happens if I overstay even by 1 day?",
+                    "acceptedAnswer": { "@type": "Answer", "text": "You risk fines of €200–5,000+, entry bans of 1–5 years, and for Indian passport holders specifically, it almost certainly means future Schengen visa refusals." }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "When do my used days 'expire'?",
+                    "acceptedAnswer": { "@type": "Answer", "text": "Each day expires exactly 180 days after it was used. So if you entered on January 1, that day stops counting against you on June 30." }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "I haven't been to Europe yet. Can I still use this tool?",
+                    "acceptedAnswer": { "@type": "Answer", "text": "Yes! Tap 'Plan Future Trip' and enter when you want to go. Since you have no past trips, you'll have the full 90 days available." }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Does UK count as Schengen?",
+                    "acceptedAnswer": { "@type": "Answer", "text": "No. The UK, Ireland, Turkey, and most Balkan countries are NOT in Schengen. Days spent there don't count toward your 90." }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "I have a 2-year Schengen visa. Does that mean I can stay 2 years?",
+                    "acceptedAnswer": { "@type": "Answer", "text": "No. A 2-year visa means you can enter Schengen anytime within 2 years, but each stay is still limited to 90 days within any 180-day window." }
+                  }
+                ]
+              }
+            ]
+          })
+        }}
+      />
 
       <footer style={{maxWidth:1060,margin:"0 auto",padding:"20px 20px",textAlign:"center",borderTop:"1px solid #F1F5F9"}}>
         <p style={{fontSize:10,color:"#CBD5E1",margin:0}}>Planning tool only. Not legal advice. Always verify with official authorities.</p>
