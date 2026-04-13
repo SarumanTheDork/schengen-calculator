@@ -313,6 +313,49 @@ export default function App(){
               </div>
             </section>
 
+            {/* Competitive moat */}
+            <section style={{background:"#fff",borderRadius:20,padding:"24px",boxShadow:"0 1px 3px #0000000a"}}>
+              <h3 style={{fontSize:16,fontWeight:750,color:"#0F172A",margin:"0 0 8px"}}>Why This Beats Generic Calculators</h3>
+              <p style={{fontSize:12,color:"#64748B",lineHeight:1.7,margin:"0 0 14px"}}>
+                Most tools only output a number. This one gives you decision support, risk context, and visa-prep execution in one workflow.
+              </p>
+              <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                {[
+                  ["Rolling 90/180 accuracy", "✓", "Often simplified"],
+                  ["Future trip simulation", "✓", "Usually missing"],
+                  ["India-focused prep guidance", "✓", "Generic, one-size-fits-all"],
+                  ["Overstay warning context", "✓", "No practical warning"],
+                  ["Share + planning flow together", "✓", "Fragmented tools"],
+                ].map((row,i)=>(
+                  <div key={i} style={{display:"grid",gridTemplateColumns:"1.4fr 0.8fr 1fr",gap:8,alignItems:"center",padding:"10px 12px",border:"1px solid #E2E8F0",borderRadius:10,background:i===0?"#F8FAFF":"#fff"}}>
+                    <span style={{fontSize:12,fontWeight:600,color:"#1E293B"}}>{row[0]}</span>
+                    <span style={{fontSize:11,color:"#16A34A",fontWeight:700}}>This tool: {row[1]}</span>
+                    <span style={{fontSize:11,color:"#94A3B8"}}>Typical: {row[2]}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* SEO landing entry points */}
+            <section style={{background:"#fff",borderRadius:20,padding:"24px",boxShadow:"0 1px 3px #0000000a"}}>
+              <h3 style={{fontSize:16,fontWeight:750,color:"#0F172A",margin:"0 0 8px"}}>Deep-Dive Guides</h3>
+              <p style={{fontSize:12,color:"#64748B",lineHeight:1.7,margin:"0 0 12px"}}>
+                Built to rank for high-intent searches and help travelers pick the right strategy quickly.
+              </p>
+              <div style={{display:"flex",flexDirection:"column",gap:8}}>
+                {[
+                  {slug:"best-schengen-calculator-for-indians",title:"Best Schengen Calculator for Indians",desc:"Why serious travelers need more than a basic day counter."},
+                  {slug:"france-schengen-checklist-india",title:"France Schengen Checklist (India)",desc:"A practical, embassy-aware prep framework."},
+                  {slug:"salaried-indian-schengen-visa-checklist",title:"Salaried Indian Visa Checklist",desc:"What salaried applicants need to prove cleanly and consistently."},
+                ].map((g)=>(
+                  <Link key={g.slug} href={`/guides/${g.slug}`} style={{display:"block",textDecoration:"none",border:"1px solid #E2E8F0",borderRadius:12,padding:"12px 14px",background:"#FAFBFF"}}>
+                    <div style={{fontSize:13,fontWeight:700,color:"#1E293B"}}>{g.title}</div>
+                    <div style={{fontSize:11,color:"#64748B",marginTop:4,lineHeight:1.6}}>{g.desc}</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
             {/* ═══ GAUGE (hero ring) ═══ */}
             <section style={P.card}>
               <div style={{fontSize:12,fontWeight:600,color:"#94A3B8",textTransform:"uppercase",letterSpacing:1,marginBottom:8}}>Your Status Right Now</div>
