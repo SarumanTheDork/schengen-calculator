@@ -138,6 +138,7 @@ export default function App(){
   const[editIdx,setEditIdx]=useState(null);
   const[planEntry,setPlanEntry]=useState("");
   const[planDays,setPlanDays]=useState("");
+  const [shareCopied, setShareCopied] = useState(false);
 
   const [mounted, setMounted] = useState(false);
   const [todayT, setTodayT] = useState(() => { const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); });
@@ -177,6 +178,12 @@ export default function App(){
 
   const pct=r.used/90;
   const sc=pct>0.85?"#E8453C":pct>0.6?"#E8973C":"#22C55E";
+  const shareUrl = "https://xnomadic.com/tools/schengen-calculator/?src=share_result_loop";
+  const shareText = `I have ${r.left} Schengen days left under the 90/180 rule. Check yours free:`;
+  const sharePayload = `${shareText} ${shareUrl}`;
+  const waShareHref = `https://api.whatsapp.com/send?text=${encodeURIComponent(sharePayload)}`;
+  const xShareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(sharePayload)}`;
+  const canNativeShare = typeof window !== "undefined" && "share" in navigator;
 
   const save=()=>{
     if(!entry||!exit||parse(exit)<parse(entry))return;
@@ -187,6 +194,31 @@ export default function App(){
   };
   const edit=i=>{const t=trips[i];setEntry(t.entry);setExit(t.exit);setCountry(t.country||"");setLabel(t.label||"");setEditIdx(i);setStep("add");};
   const cancel=()=>{setEntry("");setExit("");setCountry("");setLabel("");setEditIdx(null);setStep("dash");};
+  const copySharePayload = async () => {
+    try {
+      if (navigator?.clipboard?.writeText) await navigator.clipboard.writeText(sharePayload);
+      else {
+        const ta = document.createElement("textarea");
+        ta.value = sharePayload;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 1800);
+    } catch {}
+  };
+  const nativeShareResult = async () => {
+    try {
+      if (!navigator?.share) return;
+      await navigator.share({
+        title: "Schengen Days Left",
+        text: shareText,
+        url: shareUrl,
+      });
+    } catch {}
+  };
 
   return(
     <div style={P.page}>
@@ -283,6 +315,30 @@ export default function App(){
                   <p style={{fontSize:12,color:"#CBD5E1",margin:0}}>↓ Tap "Add Trip" above to get your real number ↓</p>
                 </div>
               )}
+            </section>
+
+            {/* Viral share loop */}
+            <section style={{background:"#fff",borderRadius:16,padding:"16px 16px 14px",border:"1px solid #E2E8F0",boxShadow:"0 1px 3px #0000000a"}}>
+              <div style={{fontSize:13,fontWeight:750,color:"#0F172A",marginBottom:6}}>Share your result</div>
+              <p style={{fontSize:12,color:"#64748B",lineHeight:1.6,margin:"0 0 10px"}}>
+                Help friends avoid overstays. Share your current Schengen days-left result in one tap.
+              </p>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                <button onClick={copySharePayload} style={{...P.btnS,flex:"none",padding:"9px 12px",fontSize:12}}>
+                  {shareCopied ? "Copied" : "Copy result text"}
+                </button>
+                {canNativeShare && (
+                  <button onClick={nativeShareResult} style={{...P.btnS,flex:"none",padding:"9px 12px",fontSize:12}}>
+                    Share...
+                  </button>
+                )}
+                <a href={waShareHref} target="_blank" rel="noopener noreferrer" style={{...P.btnS,display:"inline-flex",alignItems:"center",justifyContent:"center",flex:"none",padding:"9px 12px",fontSize:12,textDecoration:"none"}}>
+                  WhatsApp
+                </a>
+                <a href={xShareHref} target="_blank" rel="noopener noreferrer" style={{...P.btnS,display:"inline-flex",alignItems:"center",justifyContent:"center",flex:"none",padding:"9px 12px",fontSize:12,textDecoration:"none"}}>
+                  X
+                </a>
+              </div>
             </section>
 
             {/* Trips */}
