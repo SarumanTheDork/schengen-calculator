@@ -11,7 +11,6 @@ async function upsertHubSpotLead(token, lead) {
         id: lead.email,
         properties: {
           email: lead.email,
-          lifecyclestage: "lead",
         },
       },
     ],
@@ -69,7 +68,7 @@ export async function POST(request) {
     }
 
     const webhook = process.env.LEADS_WEBHOOK_URL;
-    if (webhook) {
+    if (webhook && /^https?:\/\//i.test(webhook)) {
       const r = await fetch(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
