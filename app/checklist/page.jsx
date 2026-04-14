@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 const COMMON_SECTIONS = [
   {
@@ -113,7 +112,6 @@ const PROFILE_LABEL = {
 };
 
 export default function ChecklistPage() {
-  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [profile, setProfile] = useState("salaried");
   const [error, setError] = useState("");
@@ -128,7 +126,9 @@ export default function ChecklistPage() {
     }
 
     setSubmitting(true);
-    const source = searchParams.get("src") || "direct";
+    const source = typeof window !== "undefined"
+      ? (new URLSearchParams(window.location.search).get("src") || "direct")
+      : "direct";
     try {
       const leadRes = await fetch("/api/leads", {
         method: "POST",
