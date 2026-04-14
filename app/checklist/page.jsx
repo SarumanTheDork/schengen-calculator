@@ -145,7 +145,7 @@ export default function ChecklistPage() {
       || (typeof window !== "undefined" ? localStorage.getItem("xnomadic_ref_source_last") : null)
       || source;
     try {
-      const leadRes = await fetch("/api/leads", {
+      const leadRes = await fetch(withToolBase("/api/leads"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: emailValue, profile, source, referralSource }),
