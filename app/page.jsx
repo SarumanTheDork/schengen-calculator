@@ -615,6 +615,33 @@ export default function App(){
             <ShareButtons />
           </SideCard>
 
+          {/* Cross-promote tools */}
+          <SideCard emoji="🧰" title="More xnomadic Tools" accent="#EFF6FF" accentText="#1D4ED8">
+            <p style={{margin:"0 0 10px",fontSize:12,color:"#64748B",lineHeight:1.6}}>
+              Try our other high-utility travel tools:
+            </p>
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              <a
+                href="https://xnomadic.com/tools/uk-visa-approval-probability-checker-for-indian-passport-holders/?src=schengen_crosspromo_sidebar"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{textDecoration:"none",background:"#F8FAFF",border:"1px solid #DBEAFE",borderRadius:10,padding:"10px 12px"}}
+              >
+                <div style={{fontSize:12,fontWeight:700,color:"#1E293B"}}>UK Visa Approval Probability Checker</div>
+                <div style={{fontSize:10,color:"#64748B",marginTop:3,lineHeight:1.5}}>Estimate your approval chances before applying.</div>
+              </a>
+              <a
+                href="https://xnomadic.com/tools/random-destination-picker/?d=Norway&src=schengen_crosspromo_sidebar"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{textDecoration:"none",background:"#F8FAFF",border:"1px solid #DBEAFE",borderRadius:10,padding:"10px 12px"}}
+              >
+                <div style={{fontSize:12,fontWeight:700,color:"#1E293B"}}>Random Destination Picker</div>
+                <div style={{fontSize:10,color:"#64748B",marginTop:3,lineHeight:1.5}}>Find your next travel destination instantly.</div>
+              </a>
+            </div>
+          </SideCard>
+
           {/* EES Alert */}
           <SideCard emoji="🔔" title="New: Entry/Exit System (EES)" accent="#FEF3C7" accentText="#92400E">
             <p style={{margin:0}}>From 2026, all Schengen borders digitally record your entry and exit. <strong style={{color:"#1E293B"}}>Overstays are now impossible to hide.</strong> Your biometric data creates a permanent travel footprint. Accurate day tracking is no longer optional — it's essential.</p>
