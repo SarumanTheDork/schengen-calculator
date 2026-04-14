@@ -140,7 +140,6 @@ export default function App(){
   const[planEntry,setPlanEntry]=useState("");
   const[planDays,setPlanDays]=useState("");
   const [shareCopied, setShareCopied] = useState(false);
-  const [storedRefSource, setStoredRefSource] = useState("");
 
   const [mounted, setMounted] = useState(false);
   const [todayT, setTodayT] = useState(() => { const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); });
@@ -175,13 +174,9 @@ export default function App(){
       const params = new URLSearchParams(window.location.search);
       const src = params.get("src");
       const existingFirst = localStorage.getItem("xnomadic_ref_source_first");
-      const existingLast = localStorage.getItem("xnomadic_ref_source_last");
       if (src) {
         if (!existingFirst) localStorage.setItem("xnomadic_ref_source_first", src);
         localStorage.setItem("xnomadic_ref_source_last", src);
-        setStoredRefSource(src);
-      } else if (existingLast) {
-        setStoredRefSource(existingLast);
       }
     } catch {}
   }, []);
@@ -202,9 +197,7 @@ export default function App(){
   const waShareHref = `https://api.whatsapp.com/send?text=${encodeURIComponent(sharePayload)}`;
   const xShareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(sharePayload)}`;
   const canNativeShare = typeof window !== "undefined" && "share" in navigator;
-  const checklistHref = storedRefSource
-    ? `${withToolBase("/checklist")}?src=home_sidebar_cta&ref=${encodeURIComponent(storedRefSource)}`
-    : `${withToolBase("/checklist")}?src=home_sidebar_cta`;
+  const checklistHref = "https://xnomadic.com/tools/schengen-calculator/checklist?src=home_sidebar_cta";
 
   const save=()=>{
     if(!entry||!exit||parse(exit)<parse(entry))return;
