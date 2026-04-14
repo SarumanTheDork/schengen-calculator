@@ -110,6 +110,7 @@ const PROFILE_LABEL = {
   selfEmployed: "Self-employed",
   student: "Student",
 };
+const APP_BASE = "/tools/schengen-calculator";
 
 export default function ChecklistPage() {
   const [email, setEmail] = useState("");
@@ -214,7 +215,7 @@ export default function ChecklistPage() {
   return (
     <main style={{ minHeight: "100vh", background: "linear-gradient(180deg,#FAFBFD,#F1F5F9)", padding: "24px 16px" }}>
       <div style={{ maxWidth: 720, margin: "0 auto" }}>
-        <Link href="/" style={{ fontSize: 13, color: "#2563EB", textDecoration: "none", fontWeight: 600 }}>
+        <Link href={APP_BASE} style={{ fontSize: 13, color: "#2563EB", textDecoration: "none", fontWeight: 600 }}>
           ← Back to calculator
         </Link>
 
