@@ -91,6 +91,19 @@ export default function GuidePage({ params }) {
     <main style={{ minHeight: "100vh", padding: "24px 16px", background: "linear-gradient(180deg,#FAFBFD,#F1F5F9)" }}>
       <article style={{ maxWidth: 840, margin: "0 auto", background: "#fff", borderRadius: 16, border: "1px solid #E2E8F0", padding: 22 }}>
         <Link href="/" style={{ color: "#2563EB", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>← Back to calculator</Link>
+        <section style={{ position: "sticky", top: 12, zIndex: 3, marginTop: 12, marginBottom: 12, background: "linear-gradient(135deg,#1D4ED8,#2563EB)", borderRadius: 12, padding: "10px 12px", boxShadow: "0 8px 24px #1d4ed833" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+            <div style={{ color: "#DBEAFE", fontSize: 12, lineHeight: 1.5 }}>
+              Validate your real 90/180 status before you book.
+            </div>
+            <Link
+              href={`/?src=guide_sticky_cta_${params.slug}`}
+              style={{ textDecoration: "none", background: "#fff", color: "#1D4ED8", fontSize: 12, fontWeight: 800, padding: "8px 12px", borderRadius: 9, whiteSpace: "nowrap" }}
+            >
+              Check days now
+            </Link>
+          </div>
+        </section>
         <h1 style={{ margin: "10px 0 8px", color: "#0F172A", fontSize: 30, lineHeight: 1.2, letterSpacing: "-0.02em" }}>{guide.title}</h1>
         <p style={{ margin: "0 0 16px", color: "#475569", fontSize: 14, lineHeight: 1.75 }}>{guide.summary}</p>
 
