@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GUIDE_CONTENT, GUIDE_SLUGS } from "../lib/guides";
+const APP_BASE = "/tools/schengen-calculator";
 
 export const metadata = {
   title: "Schengen Visa Guides for Indians — xnomadic",
@@ -10,7 +11,7 @@ export default function GuidesIndexPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "24px 16px", background: "linear-gradient(180deg,#FAFBFD,#F1F5F9)" }}>
       <section style={{ maxWidth: 980, margin: "0 auto" }}>
-        <Link href="/" style={{ color: "#2563EB", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>
+        <Link href={APP_BASE} style={{ color: "#2563EB", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>
           ← Back to calculator
         </Link>
 
@@ -27,7 +28,7 @@ export default function GuidesIndexPage() {
             return (
               <Link
                 key={slug}
-                href={`/guides/${slug}`}
+                href={`${APP_BASE}/guides/${slug}`}
                 style={{ textDecoration: "none", background: "#fff", borderRadius: 14, border: "1px solid #E2E8F0", padding: "14px 14px 12px", boxShadow: "0 1px 2px #0000000a" }}
               >
                 <h2 style={{ margin: "0 0 6px", color: "#1E293B", fontSize: 16, lineHeight: 1.35 }}>{guide.title}</h2>
