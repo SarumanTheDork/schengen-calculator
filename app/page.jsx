@@ -1,6 +1,7 @@
 'use client';
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import { withToolBase } from "./lib/toolBase";
 
 /* ═══════════════════════════════════════════════════════════════════
    SCHENGEN 90/180 CALCULATOR — xnomadic
@@ -17,7 +18,6 @@ const fmt=t=>{const d=new Date(t);return `${d.getDate()} ${mn(d.getMonth())} ${d
 const fmtS=t=>{const d=new Date(t);return `${d.getDate()} ${mn(d.getMonth())}`};
 
 const SCHENGEN=["Austria","Belgium","Bulgaria","Croatia","Czech Republic","Denmark","Estonia","Finland","France","Germany","Greece","Hungary","Iceland","Italy","Latvia","Liechtenstein","Lithuania","Luxembourg","Malta","Netherlands","Norway","Poland","Portugal","Romania","Slovakia","Slovenia","Spain","Sweden","Switzerland"];
-const APP_BASE = "/tools/schengen-calculator";
 
 /* ─── Engine ─── */
 function calc(trips,dateT){
@@ -203,8 +203,8 @@ export default function App(){
   const xShareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(sharePayload)}`;
   const canNativeShare = typeof window !== "undefined" && "share" in navigator;
   const checklistHref = storedRefSource
-    ? `${APP_BASE}/checklist?src=home_sidebar_cta&ref=${encodeURIComponent(storedRefSource)}`
-    : `${APP_BASE}/checklist?src=home_sidebar_cta`;
+    ? `${withToolBase("/checklist")}?src=home_sidebar_cta&ref=${encodeURIComponent(storedRefSource)}`
+    : `${withToolBase("/checklist")}?src=home_sidebar_cta`;
 
   const save=()=>{
     if(!entry||!exit||parse(exit)<parse(entry))return;
@@ -495,13 +495,13 @@ export default function App(){
                   {slug:"france-schengen-checklist-india",title:"France Schengen Checklist (India)",desc:"A practical, embassy-aware prep framework."},
                   {slug:"salaried-indian-schengen-visa-checklist",title:"Salaried Indian Visa Checklist",desc:"What salaried applicants need to prove cleanly and consistently."},
                 ].map((g)=>(
-                  <Link key={g.slug} href={`${APP_BASE}/guides/${g.slug}`} style={{display:"block",textDecoration:"none",border:"1px solid #E2E8F0",borderRadius:12,padding:"12px 14px",background:"#FAFBFF"}}>
+                  <Link key={g.slug} href={withToolBase(`/guides/${g.slug}`)} style={{display:"block",textDecoration:"none",border:"1px solid #E2E8F0",borderRadius:12,padding:"12px 14px",background:"#FAFBFF"}}>
                     <div style={{fontSize:13,fontWeight:700,color:"#1E293B"}}>{g.title}</div>
                     <div style={{fontSize:11,color:"#64748B",marginTop:4,lineHeight:1.6}}>{g.desc}</div>
                   </Link>
                 ))}
               </div>
-              <Link href={`${APP_BASE}/guides`} style={{display:"inline-flex",marginTop:10,textDecoration:"none",fontSize:12,fontWeight:700,color:"#2563EB"}}>
+              <Link href={withToolBase("/guides")} style={{display:"inline-flex",marginTop:10,textDecoration:"none",fontSize:12,fontWeight:700,color:"#2563EB"}}>
                 Explore all guides →
               </Link>
             </section>

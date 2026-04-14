@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { GUIDE_CONTENT, GUIDE_SLUGS } from "../../lib/guides";
-const APP_BASE = "/tools/schengen-calculator";
+import { withToolBase } from "../../lib/toolBase";
 
 const STOP_WORDS = new Set(["for", "and", "the", "india", "indians", "visa", "schengen", "to"]);
 
@@ -54,7 +54,7 @@ export default function GuidePage({ params }) {
         <div style={{ maxWidth: 840, margin: "0 auto", background: "#fff", borderRadius: 16, border: "1px solid #E2E8F0", padding: 20 }}>
           <h1 style={{ margin: "0 0 8px", color: "#0F172A", fontSize: 26 }}>Guide not found</h1>
           <p style={{ color: "#64748B", margin: "0 0 12px", lineHeight: 1.7 }}>This guide does not exist yet. Browse available guides from the calculator home page.</p>
-          <Link href={APP_BASE} style={{ color: "#2563EB", textDecoration: "none", fontWeight: 700 }}>← Back to calculator</Link>
+          <Link href={withToolBase("/")} style={{ color: "#2563EB", textDecoration: "none", fontWeight: 700 }}>← Back to calculator</Link>
         </div>
       </main>
     );
@@ -91,14 +91,14 @@ export default function GuidePage({ params }) {
   return (
     <main style={{ minHeight: "100vh", padding: "24px 16px", background: "linear-gradient(180deg,#FAFBFD,#F1F5F9)" }}>
       <article style={{ maxWidth: 840, margin: "0 auto", background: "#fff", borderRadius: 16, border: "1px solid #E2E8F0", padding: 22 }}>
-        <Link href={APP_BASE} style={{ color: "#2563EB", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>← Back to calculator</Link>
+        <Link href={withToolBase("/")} style={{ color: "#2563EB", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>← Back to calculator</Link>
         <section style={{ position: "sticky", top: 12, zIndex: 3, marginTop: 12, marginBottom: 12, background: "linear-gradient(135deg,#1D4ED8,#2563EB)", borderRadius: 12, padding: "10px 12px", boxShadow: "0 8px 24px #1d4ed833" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
             <div style={{ color: "#DBEAFE", fontSize: 12, lineHeight: 1.5 }}>
               Validate your real 90/180 status before you book.
             </div>
             <Link
-              href={`${APP_BASE}/?src=guide_sticky_cta_${params.slug}`}
+              href={`${withToolBase("/")}?src=guide_sticky_cta_${params.slug}`}
               style={{ textDecoration: "none", background: "#fff", color: "#1D4ED8", fontSize: 12, fontWeight: 800, padding: "8px 12px", borderRadius: 9, whiteSpace: "nowrap" }}
             >
               Check days now
@@ -126,7 +126,7 @@ export default function GuidePage({ params }) {
           <p style={{ margin: "0 0 10px", color: "#1E3A8A", fontSize: 13, lineHeight: 1.7 }}>
             Download the profile-specific comprehensive checklist and use it as your final visa-file QA sheet.
           </p>
-          <Link href={`${APP_BASE}/checklist?src=guide_${params.slug}`} style={{ display: "inline-block", textDecoration: "none", background: "#2563EB", color: "#fff", fontSize: 13, fontWeight: 700, padding: "10px 14px", borderRadius: 10 }}>
+          <Link href={`${withToolBase("/checklist")}?src=guide_${params.slug}`} style={{ display: "inline-block", textDecoration: "none", background: "#2563EB", color: "#fff", fontSize: 13, fontWeight: 700, padding: "10px 14px", borderRadius: 10 }}>
             Get Comprehensive Checklist
           </Link>
         </section>
@@ -135,7 +135,7 @@ export default function GuidePage({ params }) {
           <h2 style={{ margin: "0 0 8px", color: "#1E293B", fontSize: 16 }}>Related guides</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {relatedSlugs.map((slug) => (
-              <Link key={slug} href={`${APP_BASE}/guides/${slug}`} style={{ textDecoration: "none", border: "1px solid #E2E8F0", borderRadius: 10, padding: "10px 12px", background: "#FAFBFF" }}>
+              <Link key={slug} href={withToolBase(`/guides/${slug}`)} style={{ textDecoration: "none", border: "1px solid #E2E8F0", borderRadius: 10, padding: "10px 12px", background: "#FAFBFF" }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: "#1E293B" }}>{GUIDE_CONTENT[slug].title}</div>
                 <div style={{ fontSize: 11, color: "#64748B", marginTop: 4, lineHeight: 1.6 }}>{GUIDE_CONTENT[slug].summary}</div>
               </Link>
