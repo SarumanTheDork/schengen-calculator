@@ -500,6 +500,9 @@ export default function App(){
                   </Link>
                 ))}
               </div>
+              <Link href="/guides" style={{display:"inline-flex",marginTop:10,textDecoration:"none",fontSize:12,fontWeight:700,color:"#2563EB"}}>
+                Explore all guides →
+              </Link>
             </section>
 
 

@@ -1,76 +1,8 @@
 import Link from "next/link";
-
-const GUIDE_CONTENT = {
-  "best-schengen-calculator-for-indians": {
-    title: "Best Schengen Calculator for Indians: What Actually Matters",
-    summary: "Most calculators show a number. Serious planners need context, simulation, and execution support.",
-    sections: [
-      {
-        heading: "Why basic calculators fail",
-        points: [
-          "They often skip behavioral guidance around rolling windows and edge cases.",
-          "They do not help you evaluate future travel scenarios before booking.",
-          "They rarely connect day tracking with visa-file preparation quality.",
-        ],
-      },
-      {
-        heading: "What a high-performance tool should include",
-        points: [
-          "Accurate 90/180 rolling logic with practical warnings.",
-          "Future trip planning to stress-test stay length safely.",
-          "India-specific guidance for profiles like salaried, self-employed, and student.",
-        ],
-      },
-    ],
-  },
-  "france-schengen-checklist-india": {
-    title: "France Schengen Checklist for Indian Applicants",
-    summary: "A clean file wins faster than a bulky file. Focus on consistency, traceability, and realism.",
-    sections: [
-      {
-        heading: "Core file quality rules",
-        points: [
-          "All dates must match exactly across itinerary, bookings, leave letters, and insurance.",
-          "Financial profile should support trip intent naturally; avoid unexplained spikes.",
-          "Cover letter should be concise, specific, and coherent with your documents.",
-        ],
-      },
-      {
-        heading: "Common failure points",
-        points: [
-          "Inconsistent destination logic between first entry and major stay.",
-          "Weak purpose statement or vague itinerary.",
-          "Missing support proof for sponsor-funded travel.",
-        ],
-      },
-    ],
-  },
-  "salaried-indian-schengen-visa-checklist": {
-    title: "Salaried Indian Schengen Visa Checklist",
-    summary: "For salaried applicants, employment credibility and document consistency are the primary levers.",
-    sections: [
-      {
-        heading: "Non-negotiable salaried documents",
-        points: [
-          "Employment verification letter with role, tenure, and salary.",
-          "Leave approval matching travel dates exactly.",
-          "Recent salary slips plus bank statements showing regular credits.",
-        ],
-      },
-      {
-        heading: "How to strengthen approval confidence",
-        points: [
-          "Show stable finances over 6 months, not last-minute injections.",
-          "Ensure itinerary cost is proportional to income profile.",
-          "Keep every ID field (name, passport number, DOB) identical everywhere.",
-        ],
-      },
-    ],
-  },
-};
+import { GUIDE_CONTENT, GUIDE_SLUGS } from "../../lib/guides";
 
 export async function generateStaticParams() {
-  return Object.keys(GUIDE_CONTENT).map((slug) => ({ slug }));
+  return GUIDE_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {

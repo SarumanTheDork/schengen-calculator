@@ -1,10 +1,6 @@
-export default function sitemap() {
-  const guides = [
-    'best-schengen-calculator-for-indians',
-    'france-schengen-checklist-india',
-    'salaried-indian-schengen-visa-checklist',
-  ];
+import { GUIDE_SLUGS } from "./lib/guides";
 
+export default function sitemap() {
   return [
     {
       url: 'https://xnomadic.com/tools/schengen-calculator/',
@@ -18,7 +14,13 @@ export default function sitemap() {
       changeFrequency: 'weekly',
       priority: 0.9,
     },
-    ...guides.map((slug) => ({
+    {
+      url: 'https://xnomadic.com/tools/schengen-calculator/guides',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    ...GUIDE_SLUGS.map((slug) => ({
       url: `https://xnomadic.com/tools/schengen-calculator/guides/${slug}`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
