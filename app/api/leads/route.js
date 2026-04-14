@@ -38,6 +38,7 @@ export async function POST(request) {
     const email = String(body?.email || "").trim().toLowerCase();
     const profile = String(body?.profile || "");
     const source = String(body?.source || "unknown");
+    const referralSource = String(body?.referralSource || source);
 
     if (!EMAIL_RE.test(email)) {
       return NextResponse.json({ error: "Invalid email." }, { status: 400 });
@@ -50,6 +51,7 @@ export async function POST(request) {
       email,
       profile,
       source,
+      referralSource,
       createdAt: new Date().toISOString(),
     };
 

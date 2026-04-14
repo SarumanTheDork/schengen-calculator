@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const COMMON_SECTIONS = [
@@ -118,6 +118,18 @@ export default function ChecklistPage() {
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const src = params.get("src");
+      if (src) {
+        const existingFirst = localStorage.getItem("xnomadic_ref_source_first");
+        if (!existingFirst) localStorage.setItem("xnomadic_ref_source_first", src);
+        localStorage.setItem("xnomadic_ref_source_last", src);
+      }
+    } catch {}
+  }, []);
+
   const downloadChecklist = async () => {
     const emailValue = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
@@ -126,14 +138,16 @@ export default function ChecklistPage() {
     }
 
     setSubmitting(true);
-    const source = typeof window !== "undefined"
-      ? (new URLSearchParams(window.location.search).get("src") || "direct")
-      : "direct";
+    const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const source = params?.get("src") || "checklist_direct";
+    const referralSource = params?.get("ref")
+      || (typeof window !== "undefined" ? localStorage.getItem("xnomadic_ref_source_last") : null)
+      || source;
     try {
       const leadRes = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailValue, profile, source }),
+        body: JSON.stringify({ email: emailValue, profile, source, referralSource }),
       });
       if (!leadRes.ok) {
         setError("Could not save your request right now. Please try again.");

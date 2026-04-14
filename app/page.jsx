@@ -139,6 +139,7 @@ export default function App(){
   const[planEntry,setPlanEntry]=useState("");
   const[planDays,setPlanDays]=useState("");
   const [shareCopied, setShareCopied] = useState(false);
+  const [storedRefSource, setStoredRefSource] = useState("");
 
   const [mounted, setMounted] = useState(false);
   const [todayT, setTodayT] = useState(() => { const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); });
@@ -168,6 +169,22 @@ export default function App(){
     return () => { clearInterval(t); window.removeEventListener('focus', updateToday); };
   }, []);
 
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const src = params.get("src");
+      const existingFirst = localStorage.getItem("xnomadic_ref_source_first");
+      const existingLast = localStorage.getItem("xnomadic_ref_source_last");
+      if (src) {
+        if (!existingFirst) localStorage.setItem("xnomadic_ref_source_first", src);
+        localStorage.setItem("xnomadic_ref_source_last", src);
+        setStoredRefSource(src);
+      } else if (existingLast) {
+        setStoredRefSource(existingLast);
+      }
+    } catch {}
+  }, []);
+
   const r=useMemo(()=>calc(trips,todayT),[trips,todayT]);
   const re=useMemo(()=>r.left===0?reentry(trips,todayT):null,[trips,r.left,todayT]);
   const planR=useMemo(()=>{
@@ -184,6 +201,9 @@ export default function App(){
   const waShareHref = `https://api.whatsapp.com/send?text=${encodeURIComponent(sharePayload)}`;
   const xShareHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(sharePayload)}`;
   const canNativeShare = typeof window !== "undefined" && "share" in navigator;
+  const checklistHref = storedRefSource
+    ? `/checklist?src=home_sidebar_cta&ref=${encodeURIComponent(storedRefSource)}`
+    : "/checklist?src=home_sidebar_cta";
 
   const save=()=>{
     if(!entry||!exit||parse(exit)<parse(entry))return;
@@ -661,7 +681,7 @@ export default function App(){
               Get our free document checklist tailored to your profile — self-employed, salaried, or student.
             </p>
             <Link
-              href="/checklist?src=home_sidebar_cta"
+              href={checklistHref}
               style={{display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8,width:"100%",background:"#fff",color:"#2563EB",fontSize:15,fontWeight:800,padding:"12px 18px",borderRadius:14,cursor:"pointer",border:"none",fontFamily:"inherit",boxShadow:"0 1px 2px #0000001f",textDecoration:"none"}}
               aria-label="Get Free Checklist"
             >
