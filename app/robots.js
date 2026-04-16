@@ -5,6 +5,6 @@ export default function robots() {
       allow: '/',
       disallow: '/private/',
     },
-    sitemap: 'https://xnomadic.com/sitemap.xml',
+    sitemap: 'https://xnomadic.com/tools/schengen-calculator/sitemap.xml',
   }
 }

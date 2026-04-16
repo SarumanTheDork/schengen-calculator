@@ -1,4 +1,35 @@
 export const GUIDE_CONTENT = {
+  "how-to-calculate-schengen-90-180-days": {
+    title: "How to Calculate Schengen 90/180 Days (Rolling Window)",
+    summary:
+      "The rule sounds simple until you plan real trips. Here is the exact mental model search engines (and border officers) expect you to follow.",
+    sections: [
+      {
+        heading: "What the 90/180 rule actually means",
+        points: [
+          "You may stay at most 90 days in any rolling 180-day period across the entire Schengen Area, not per country.",
+          "The window is rolling: every new day looks back 180 days and counts how many of those days you were inside Schengen.",
+          "Entry and exit days both count as full days if you crossed the border on those calendar dates.",
+        ],
+      },
+      {
+        heading: "Why manual counting fails",
+        points: [
+          "Spreadsheets forget trips; passport stamps do not. Track every Schengen stay block, including short hops.",
+          "Multi-entry visas do not multiply your allowance — they only change how often you can cross.",
+          "Transit that clears immigration usually counts; do not assume airside time is automatically exempt.",
+        ],
+      },
+      {
+        heading: "How calculators help (when they are built correctly)",
+        points: [
+          "A serious tool applies the same rolling window logic embassies reference for short-stay compliance.",
+          "Simulation matters: model a future entry date before you buy non-refundable flights.",
+          "Pair day math with buffer days for delays — the highest-risk overstay is accidental, not intentional.",
+        ],
+      },
+    ],
+  },
   "best-schengen-calculator-for-indians": {
     title: "Best Schengen Calculator for Indians: What Actually Matters",
     summary: "Most calculators show a number. Serious planners need context, simulation, and execution support.",

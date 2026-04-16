@@ -484,6 +484,7 @@ export default function App(){
               </p>
               <div style={{display:"flex",flexDirection:"column",gap:8}}>
                 {[
+                  {slug:"how-to-calculate-schengen-90-180-days",title:"How to Calculate 90/180 Days",desc:"Rolling window explained — the exact model embassies expect."},
                   {slug:"best-schengen-calculator-for-indians",title:"Best Schengen Calculator for Indians",desc:"Why serious travelers need more than a basic day counter."},
                   {slug:"france-schengen-checklist-india",title:"France Schengen Checklist (India)",desc:"A practical, embassy-aware prep framework."},
                   {slug:"salaried-indian-schengen-visa-checklist",title:"Salaried Indian Visa Checklist",desc:"What salaried applicants need to prove cleanly and consistently."},
@@ -723,11 +724,26 @@ export default function App(){
             "@context": "https://schema.org",
             "@graph": [
               {
+                "@type": "Organization",
+                "name": "xnomadic",
+                "url": "https://xnomadic.com"
+              },
+              {
+                "@type": "WebSite",
+                "name": "xnomadic Schengen Calculator",
+                "url": "https://xnomadic.com/tools/schengen-calculator/",
+                "inLanguage": "en",
+                "publisher": { "@type": "Organization", "name": "xnomadic", "url": "https://xnomadic.com" }
+              },
+              {
                 "@type": "WebApplication",
                 "name": "Schengen 90/180 Day Calculator",
                 "url": "https://xnomadic.com/tools/schengen-calculator/",
                 "applicationCategory": "TravelApplication",
                 "operatingSystem": "Any",
+                "browserRequirements": "Requires JavaScript. Requires HTML5.",
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+                "provider": { "@type": "Organization", "name": "xnomadic", "url": "https://xnomadic.com" },
                 "description": "Free Schengen calculator for Indian travelers. Track your 90-day limit, plan future trips, and avoid overstaying in the Schengen Area."
               },
               {
